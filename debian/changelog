@@ -1,3 +1,11 @@
+tkl-installer (0.1.2+keel2) trixie; urgency=medium
+
+  * Build-Depends: pybuild-plugin-pyproject and python3-setuptools, the
+    build backend pyproject.toml names (setuptools.build_meta); on a bare
+    trixie the wheel build failed without them.
+
+ -- Keel Linux maintainers <admin@keellinux.org>  Fri, 02 Oct 2026 18:02:35 +0000
+
 tkl-installer (0.1.2+keel1) trixie; urgency=medium
 
   * Build for Keel Linux, Debian 13.

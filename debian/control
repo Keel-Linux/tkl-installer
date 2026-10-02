@@ -7,6 +7,8 @@ Build-Depends:
  python3 (>= 3.13),
  dh-python,
  pybuild-plugin-pyproject,
+ python3-setuptools,
+ pybuild-plugin-pyproject,
  python3-dialog,
 Standards-Version: 4.7.2
 Vcs-Git: https://github.com/turnkeylinux/tkl-installer.git
