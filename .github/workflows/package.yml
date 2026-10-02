@@ -1,0 +1,36 @@
+# Build this package on trixie. The check is "build / trixie".
+#
+# dpkg-buildpackage in a Debian trixie system container, an unprivileged
+# LXC container on the self-hosted runner keel-lxc-1, through the reusable
+# workflow lxc-trixie.yml of Keel-Linux/.github. The source format is
+# 3.0 (native), so the tree is the source. lintian reports and does not
+# fail the job: its findings are upstream packaging. The files are kept as
+# the artifact "debs". A pull request from a fork never reaches the runner.
+name: package
+
+on:
+  pull_request:
+  push:
+    branches: [keel/trixie]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    uses: keel-linux/.github/.github/workflows/lxc-trixie.yml@main
+    with:
+      timeout: 20
+      artifact-dir: dist
+      artifact-name: debs
+      run: |
+        apt-get update -qq
+        apt-get install -y -qq --no-install-recommends \
+          ca-certificates devscripts equivs lintian
+        (cd /tmp && mk-build-deps --install --remove \
+          --tool 'apt-get -y -qq --no-install-recommends' /src/debian/control)
+        dpkg-buildpackage -us -uc
+        lintian --fail-on none --info --display-info ../*.changes
+        mkdir dist
+        cp ../*.deb ../*.dsc ../*.tar.* ../*.buildinfo ../*.changes dist/

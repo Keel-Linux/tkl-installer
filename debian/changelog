@@ -1,3 +1,9 @@
+tkl-installer (0.1.2+keel1) trixie; urgency=medium
+
+  * Build for Keel Linux, Debian 13.
+
+ -- Keel Linux maintainers <admin@keellinux.org>  Fri, 02 Oct 2026 17:40:57 +0000
+
 tkl-installer (0.1~beta1) trixie; urgency=low
 
   * Initial build...
