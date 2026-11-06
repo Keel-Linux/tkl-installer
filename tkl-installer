@@ -28,6 +28,7 @@ from tkl_installer.installer import (
     generate_fstab,
     install_grub,
     prepare_live_media_for_reboot,
+    reboot_now,
     run_extra_commands,
     unpack_rootfs,
 )
@@ -574,7 +575,7 @@ def main() -> int:
         )
         with contextlib.suppress(EOFError, KeyboardInterrupt):
             input()
-        runner.run(["reboot"], destructive=True, check=False)
+        reboot_now()
     else:
         ui.step(
             "Returning to live environment. You may run the installer again if"
