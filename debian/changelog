@@ -1,3 +1,17 @@
+tkl-installer (0.1.2+keel4) trixie; urgency=medium
+
+  * The installer shows the Keel Linux name: "Keel Linux Installer" is the
+    title and the backtitle of each screen, the start screen says "Keel
+    Linux Live Installer", and the unit that systemd names on the console
+    and the help text of the command say "Keel Linux". Before, each screen
+    said "TurnKey Installer" and the first boot that follows said "Keel
+    Linux - First boot configuration" (commissioning test of the WordPress
+    ISO on a Proxmox VM on BR1, 2026-11-06). The package, the command and
+    the LVM volume group keep their names.
+  * tests/test_branding.py holds these texts, and the build runs it.
+
+ -- Marcos Mendez <mendez.foto@gmail.com>  Fri, 06 Nov 2026 12:00:00 +0000
+
 tkl-installer (0.1.2+keel3) trixie; urgency=medium
 
   * Maintainer and Uploaders are the Keel Linux maintainers; the TurnKey

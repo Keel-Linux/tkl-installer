@@ -219,7 +219,7 @@ def _build_parser() -> tuple[argparse.ArgumentParser, argparse.ArgumentParser]:
     # --- basic parser (common args + basic help/help-all hooks) ---
     basic = argparse.ArgumentParser(
         prog="tkl-installer",
-        description="Opinionated CLI installer for TurnKey Linux. Also"
+        description="Opinionated CLI installer for Keel Linux. Also"
         " compatible with most other Debian-based systems.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         parents=[common],
@@ -243,7 +243,7 @@ def _build_parser() -> tuple[argparse.ArgumentParser, argparse.ArgumentParser]:
     # --- full parser (inherits common + adds advanced args) ---
     full = argparse.ArgumentParser(
         prog="tkl-installer",
-        description="Opinionated CLI installer for TurnKey Linux. Also"
+        description="Opinionated CLI installer for Keel Linux. Also"
         " compatible with most other Debian-based systems.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         parents=[common],

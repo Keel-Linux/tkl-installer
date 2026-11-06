@@ -30,8 +30,10 @@ from .runner import (
 
 log = logging.getLogger(__name__)
 
-# defaults
-TITLE = "TurnKey Installer"
+# defaults: the product name, the same as in the backtitle of the first
+# boot that follows the install ("Keel Linux - First boot configuration")
+PRODUCT = "Keel Linux"
+TITLE = f"{PRODUCT} Installer"
 
 # set max dialog box size based on terminal size
 _MAX_WIDTH = 72
@@ -873,7 +875,7 @@ class UI:
     def app_start(self) -> None:
         """Show a brief application startup infobox."""
         self.infobox(
-            "  TurnKey Linux custom Live Installer\n\n  Starting up...",
+            f"  {PRODUCT} Live Installer\n\n  Starting up...",
         )
 
     def header(self, title: str) -> None:
