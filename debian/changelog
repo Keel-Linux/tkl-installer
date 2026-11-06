@@ -1,3 +1,51 @@
+tkl-installer (0.1.2+keel5) trixie; urgency=medium
+
+  * The reboot after the install works when the live medium is gone. The
+    installer asks the operator to remove the medium, and the reboot
+    program is a file of that medium: its exec failed with EIO and the
+    machine stayed in the live system ("OSError: [Errno 5] Input/output
+    error: 'reboot'", VM 9367 on BR1, 2026-11-06). The kernel's own reboot
+    (SysRq b) now takes over when the program cannot run or fails; the
+    filesystems of the target are unmounted and synced before.
+
+ -- KeelLinux maintainers <admin@keellinux.org>  Fri, 06 Nov 2026 18:00:00 +0000
+
+tkl-installer (0.1.2+keel4) trixie; urgency=medium
+
+  * The installer shows the Keel Linux name: "Keel Linux Installer" is the
+    title and the backtitle of each screen, the start screen says "Keel
+    Linux Live Installer", and the unit that systemd names on the console
+    and the help text of the command say "Keel Linux". Before, each screen
+    said "TurnKey Installer" and the first boot that follows said "Keel
+    Linux - First boot configuration" (commissioning test of the WordPress
+    ISO on a Proxmox VM on BR1, 2026-11-06). The package, the command and
+    the LVM volume group keep their names.
+  * tests/test_branding.py holds these texts, and the build runs it.
+
+ -- Marcos Mendez <mendez.foto@gmail.com>  Fri, 06 Nov 2026 12:00:00 +0000
+
+tkl-installer (0.1.2+keel3) trixie; urgency=medium
+
+  * Maintainer and Uploaders are the Keel Linux maintainers; the TurnKey
+    Linux team asked not to be listed as maintainers of this fork. Their
+    copyright and attribution are unchanged.
+
+ -- Marcos Mendez <mendez.foto@gmail.com>  Wed, 07 Oct 2026 14:14:24 +0000
+
+tkl-installer (0.1.2+keel2) trixie; urgency=medium
+
+  * Build-Depends: pybuild-plugin-pyproject and python3-setuptools, the
+    build backend pyproject.toml names (setuptools.build_meta); on a bare
+    trixie the wheel build failed without them.
+
+ -- Keel Linux maintainers <admin@keellinux.org>  Fri, 02 Oct 2026 18:02:35 +0000
+
+tkl-installer (0.1.2+keel1) trixie; urgency=medium
+
+  * Build for Keel Linux, Debian 13.
+
+ -- Keel Linux maintainers <admin@keellinux.org>  Fri, 02 Oct 2026 17:40:57 +0000
+
 tkl-installer (0.1~beta1) trixie; urgency=low
 
   * Initial build...

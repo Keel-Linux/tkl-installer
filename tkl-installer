@@ -28,6 +28,7 @@ from tkl_installer.installer import (
     generate_fstab,
     install_grub,
     prepare_live_media_for_reboot,
+    reboot_now,
     run_extra_commands,
     unpack_rootfs,
 )
@@ -219,7 +220,7 @@ def _build_parser() -> tuple[argparse.ArgumentParser, argparse.ArgumentParser]:
     # --- basic parser (common args + basic help/help-all hooks) ---
     basic = argparse.ArgumentParser(
         prog="tkl-installer",
-        description="Opinionated CLI installer for TurnKey Linux. Also"
+        description="Opinionated CLI installer for Keel Linux. Also"
         " compatible with most other Debian-based systems.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         parents=[common],
@@ -243,7 +244,7 @@ def _build_parser() -> tuple[argparse.ArgumentParser, argparse.ArgumentParser]:
     # --- full parser (inherits common + adds advanced args) ---
     full = argparse.ArgumentParser(
         prog="tkl-installer",
-        description="Opinionated CLI installer for TurnKey Linux. Also"
+        description="Opinionated CLI installer for Keel Linux. Also"
         " compatible with most other Debian-based systems.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         parents=[common],
@@ -574,7 +575,7 @@ def main() -> int:
         )
         with contextlib.suppress(EOFError, KeyboardInterrupt):
             input()
-        runner.run(["reboot"], destructive=True, check=False)
+        reboot_now()
     else:
         ui.step(
             "Returning to live environment. You may run the installer again if"

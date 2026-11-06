@@ -1,11 +1,14 @@
 Source: tkl-installer
 Section: admin
 Priority: optional
-Maintainer: Jeremy Davis <jeremy@turnkeylinux.org>
+Maintainer: KeelLinux maintainers <admin@keellinux.org>
+Uploaders: Marcos Mendez <mendez.foto@gmail.com>
 Build-Depends:
  debhelper-compat (= 13),
  python3 (>= 3.13),
  dh-python,
+ pybuild-plugin-pyproject,
+ python3-setuptools,
  pybuild-plugin-pyproject,
  python3-dialog,
 Standards-Version: 4.7.2

@@ -1,0 +1,3 @@
+# Security scan baseline (keel-linux/.github, security-scan.yml): findings
+# that were read and are not a risk, one per line, the fingerprint and why.
+bandit:B108:tkl_installer/partitioner.py:d0b664e386cd a table mapping the /tmp mount point to a partition label, no temporary file is created

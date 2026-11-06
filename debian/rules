@@ -4,3 +4,10 @@ export PYTHONDONTWRITEBYTECODE=1
 
 %:
 	dh $@ --with python3 --buildsystem=pybuild
+
+# The tests run from the source tree: they read the unit and the command,
+# which are not part of the build directory of pybuild.
+override_dh_auto_test:
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+	PYTHONPATH=$(CURDIR) python3 -m unittest discover -s tests -v
+endif

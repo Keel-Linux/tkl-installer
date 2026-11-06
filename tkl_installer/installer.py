@@ -417,3 +417,30 @@ def prepare_live_media_for_reboot() -> None:
                 eject.returncode,
                 eject.stderr,
             )
+
+
+SYSRQ_TRIGGER = "/proc/sysrq-trigger"
+
+
+def reboot_now() -> None:
+    """Reboot into the installed system, also when the medium is gone.
+
+    The installer asks the operator to remove the live medium before the
+    reboot. ``reboot`` is a program of that medium: once the medium is
+    out, its exec fails with EIO, and the machine stayed in the live
+    system (VM 9367 on BR1, 2026-11-06: "OSError: [Errno 5] Input/output
+    error: 'reboot'"). The filesystems of the target are unmounted and
+    synced before this, so the kernel's own reboot (SysRq b, which needs no
+    program) is safe as the fallback.
+    """
+    os.sync()
+    try:
+        result = run(["reboot"], destructive=True, check=False)
+    except OSError as exc:
+        log.warning("reboot could not run (%s): the kernel reboots", exc)
+    else:
+        if result.returncode == 0:
+            return
+        log.warning("reboot exited %d: the kernel reboots", result.returncode)
+    with open(SYSRQ_TRIGGER, "w", encoding="ascii") as trigger:
+        trigger.write("b")
