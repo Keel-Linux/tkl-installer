@@ -30,6 +30,9 @@ from .runner import (
 
 log = logging.getLogger(__name__)
 
+# the lines of a command's error that a failed step shows
+ERROR_LINES = 12
+
 # defaults: the product name, the same as in the backtitle of the first
 # boot that follows the install ("Keel Linux - First boot configuration")
 PRODUCT = "Keel Linux"
@@ -611,9 +614,19 @@ class UI:
         try:
             yield
             log.info("[ui] done: %s", msg)
-        except Exception:
+        except Exception as e:
             log.exception("[ui] failed: %s", msg)
-            self.msgbox(f"\n:(  Step '{msg}' failed\n", title="Error")
+            # the command and the last lines of its error, as the log has
+            # them: "failed" alone said nothing of a timeout (BR2,
+            # 2026-11-09)
+            lines = str(e).strip().splitlines() or [type(e).__name__]
+            if len(lines) > ERROR_LINES + 1:
+                lines = [lines[0], "...", *lines[-ERROR_LINES:]]
+            detail = "\n".join(lines)
+            self.msgbox(
+                f"\n:(  Step '{msg}' failed\n\n{detail}\n",
+                title="Error",
+            )
             raise
 
     def progress(

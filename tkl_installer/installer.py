@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 import os
 import shutil
+import time
 from glob import glob
 from os.path import dirname, isfile, join
 from typing import Any
@@ -221,16 +222,47 @@ def install_grub(scheme: PartitionScheme, target: str) -> None:
         _unbind_mounts(target)
 
 
-def _chroot(target: str, cmd: list[str], **kwargs: Any) -> None:  # noqa: ANN401
-    """Run a command inside the target chroot.
+# The GRUB steps read the modules and write the boot sector or the EFI
+# partition, and update-grub probes every disk. On BR2 (2026-11-09)
+# grub-install took 26 s on an idle host, and the step failed on a busy host
+# at the old limit of 120 s. On a VM disk throttled to 10 IOPS the GRUB
+# steps took more than 120 s on the first try and 112 s again with a
+# warm cache (evidence tkl-installer-grub-timeout). The
+# limit only stops a command that hangs; it must not stop a slow one.
+GRUB_TIMEOUT = 1800
+
+
+def _chroot(
+    target: str,
+    cmd: list[str],
+    timeout: int = 120,
+    **kwargs: Any,  # noqa: ANN401
+) -> None:
+    """Run a command inside the target chroot, and log how long it took.
 
     Args:
         target (str): Chroot root path.
         cmd (list[str]): Command to run inside the chroot.
+        timeout (int): Seconds before the command is stopped.
+            Defaults to ``120``.
         **kwargs: Additional keyword arguments forwarded to ``run()``.
 
     """
-    run(["chroot", target, *cmd], destructive=True, timeout=120, **kwargs)
+    start = time.monotonic()
+    try:
+        run(
+            ["chroot", target, *cmd],
+            destructive=True,
+            timeout=timeout,
+            **kwargs,
+        )
+    finally:
+        log.info(
+            "chroot %s: %.1f s (limit %d s)",
+            cmd[0],
+            time.monotonic() - start,
+            timeout,
+        )
 
 
 def _install_grub_uefi(target: str) -> None:
@@ -252,6 +284,7 @@ def _install_grub_uefi(target: str) -> None:
             "--bootloader-id=debian",
             "--recheck",
         ],
+        timeout=GRUB_TIMEOUT,
         capture=True,
     )
 
@@ -273,6 +306,7 @@ def _install_grub_bios(target: str, disk: str) -> None:
             "--recheck",
             disk,
         ],
+        timeout=GRUB_TIMEOUT,
         capture=True,
     )
 
@@ -285,7 +319,7 @@ def _update_grub(target: str) -> None:
 
     """
     log.info("Running update-grub")
-    _chroot(target, ["update-grub"], capture=True)
+    _chroot(target, ["update-grub"], timeout=GRUB_TIMEOUT, capture=True)
 
 
 def _bind_mounts(target: str) -> None:

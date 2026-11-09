@@ -1,3 +1,16 @@
+tkl-installer (0.1.2+keel6) trixie; urgency=medium
+
+  * The GRUB steps (grub-install, update-grub) wait up to 1800 s, not
+    120 s. The web ISO failed on BR2 (2026-11-09) with "Step 'Installing
+    GRUB bootloader...' failed" while the host was busy. On a VM disk
+    throttled to 10 IOPS grub-install took more than 120 s and was
+    stopped, the same failure; on an idle host it takes 26 s. Each chroot
+    command now logs how long it took and its limit.
+  * A failed step shows the command and the last lines of its error, for
+    example "Timed out after 120s", and not only "failed".
+
+ -- Marcos Méndez <mendez.foto@gmail.com>  Mon, 09 Nov 2026 22:00:00 +0000
+
 tkl-installer (0.1.2+keel5) trixie; urgency=medium
 
   * The reboot after the install works when the live medium is gone. The
